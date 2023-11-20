@@ -538,7 +538,9 @@ function getCardId(value) {
     'Q',
     'K',
   ];
+
   const lastValue = value.at(-1);
+
   let index;
   switch (lastValue) {
     case '♣':
