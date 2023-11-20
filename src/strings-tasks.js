@@ -240,8 +240,10 @@ function endsWith(str, substr) {
  *   formatTime(0, 45) => "00:45"
  *   formatTime(0, 0) => "00:00"
  */
-function formatTime(/* minutes, seconds */) {
-  throw new Error('Not implemented');
+function formatTime(minutes, seconds) {
+  return `${minutes.toString().padStart(2, '0')}:${seconds
+    .toString()
+    .padStart(2, '0')}`;
 }
 
 /**
@@ -428,8 +430,8 @@ function getStringFromTemplate(firstName, lastName) {
  *   extractNameFromTemplate('Hello, John Doe!') => 'John Doe'
  *   extractNameFromTemplate('Hello, Chuck Norris!') => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(value) {
+  return value.substring(value.indexOf(' ') + 1, value.indexOf('!'));
 }
 
 /**
@@ -443,8 +445,11 @@ function extractNameFromTemplate(/* value */) {
  *   unbracketTag('<span>') => 'span'
  *   unbracketTag('<a>') => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  if (str.startsWith('<') && str.endsWith('>')) {
+    return str.slice(1, -1);
+  }
+  return str;
 }
 
 /**
@@ -482,8 +487,15 @@ function extractEmails(str) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const arr = str
+    .split('')
+    .map((item) =>
+      item.match(/[a-zA-Z]/)
+        ? item.charCodeAt(0) + (item.toLowerCase() <= 'm' ? 13 : -13)
+        : item.charCodeAt(0)
+    );
+  return String.fromCharCode(...arr);
 }
 
 /**
@@ -510,8 +522,43 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const initialArr = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+  const lastValue = value.at(-1);
+  let index;
+  switch (lastValue) {
+    case '♣':
+      index = 1;
+      break;
+    case '♦':
+      index = 2;
+      break;
+    case '♥':
+      index = 3;
+      break;
+    case '♠':
+      index = 4;
+      break;
+    default:
+      break;
+  }
+  const firstValIndex = initialArr.indexOf(value.split(lastValue)[0]);
+
+  return 13 * (index - 1) + firstValIndex;
 }
 
 module.exports = {
